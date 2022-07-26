@@ -1,0 +1,14 @@
+name: FlowFastTravel
+version: '${project.version}'
+main: de.flowwindustries.flowfasttravel.FlowFastTravel
+api-version: 1.19
+prefix: FastTravel
+authors: [ Kapitan_Floww ]
+description: FastTraveling for Spigot Servers
+website: floww-industries.de
+
+commands:
+  wp:
+    description: Waypoint Command to create, list, update and delete waypoints
+  ft:
+    description: Command to fast travel to a location
