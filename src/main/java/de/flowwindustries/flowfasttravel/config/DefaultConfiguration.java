@@ -1,5 +1,6 @@
 package de.flowwindustries.flowfasttravel.config;
 
+import de.flowwindustries.flowfasttravel.FlowFastTravel;
 import lombok.extern.java.Log;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -36,5 +37,6 @@ public class DefaultConfiguration {
 
         //Save configuration
         configuration.options().copyDefaults(true);
+        FlowFastTravel.getInstance().saveConfig();
     }
 }

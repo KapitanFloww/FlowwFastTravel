@@ -67,4 +67,6 @@ public class Waypoint {
         this.z = z;
         this.worldName = worldName;
     }
+
+    public Waypoint() {}
 }

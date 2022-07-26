@@ -2,7 +2,7 @@ package de.flowwindustries.flowfasttravel.command;
 
 import de.flowwindustries.flowfasttravel.domain.Waypoint;
 import de.flowwindustries.flowfasttravel.service.WaypointService;
-import de.flowwindustries.flowfasttravel.utils.SpigotParser;
+import de.flowwindustries.flowfasttravel.utils.SpigotUtils;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 @RequiredArgsConstructor
 public class FastTravelCommand implements CommandExecutor {
 
-    protected static final String INVALID_ARGUMENTS = "Invalid arguments %s";
+    protected static final String INVALID_ARGUMENTS = "Invalid arguments: %s";
     private final WaypointService waypointService;
 
     @Override
@@ -24,11 +24,11 @@ public class FastTravelCommand implements CommandExecutor {
                 if (args.length == 1) {
                     executeFastTravelCommand(args, player); //ft <name>
                 } else {
-                    player.sendMessage(String.format(INVALID_ARGUMENTS, ""));
+                    throw new IllegalArgumentException(String.format(INVALID_ARGUMENTS, "Usage /ft <name>"));
                 }
                 return true;
             } catch (IllegalArgumentException ex) {
-                player.sendMessage(ChatColor.RED + ex.getMessage());
+                SpigotUtils.sendPlayerMessage(player, ChatColor.RED + ex.getMessage());
             }
         }
         return false;
@@ -38,8 +38,8 @@ public class FastTravelCommand implements CommandExecutor {
         String waypointName = args[0];
         Waypoint waypoint = waypointService.getSafe(waypointName);
 
-        Location waypointLocation = new Location(SpigotParser.getWorldSafe(waypoint.getWorldName()), waypoint.getX(), waypoint.getY(), waypoint.getZ());
+        Location waypointLocation = new Location(SpigotUtils.getWorldSafe(waypoint.getWorldName()), waypoint.getX(), waypoint.getY(), waypoint.getZ());
         player.teleport(waypointLocation);
-        player.sendMessage("Welcome to " + waypointName);
+        SpigotUtils.sendPlayerMessage(player, String.format("%sWelcome to %s%s", ChatColor.YELLOW, ChatColor.GOLD, waypoint.getName()));
     }
 }

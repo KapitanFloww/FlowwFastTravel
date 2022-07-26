@@ -2,6 +2,7 @@ package de.flowwindustries.flowfasttravel;
 
 import de.flowwindustries.flowfasttravel.command.FastTravelCommand;
 import de.flowwindustries.flowfasttravel.command.WaypointCommand;
+import de.flowwindustries.flowfasttravel.config.DefaultConfiguration;
 import de.flowwindustries.flowfasttravel.domain.Waypoint;
 import de.flowwindustries.flowfasttravel.repository.WaypointRepository;
 import de.flowwindustries.flowfasttravel.service.WaypointService;
@@ -22,6 +23,8 @@ public final class FlowFastTravel extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         instance = this;
+
+        DefaultConfiguration.setupDefaultConfiguration(instance.getConfig());
 
         Clock clock = Clock.system(ZoneId.systemDefault());
         WaypointRepository waypointRepository = new WaypointRepository(Waypoint.class);
