@@ -13,14 +13,15 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.Properties;
 
-import static de.flowwindustries.flowwfasttravel.config.DefaultConfiguration.PATH_DB_DATABASE;
-import static de.flowwindustries.flowwfasttravel.config.DefaultConfiguration.PATH_DB_DDL;
-import static de.flowwindustries.flowwfasttravel.config.DefaultConfiguration.PATH_DB_HOST;
-import static de.flowwindustries.flowwfasttravel.config.DefaultConfiguration.PATH_DB_PASSWORD;
-import static de.flowwindustries.flowwfasttravel.config.DefaultConfiguration.PATH_DB_PORT;
 import static de.flowwindustries.flowwfasttravel.config.DefaultConfiguration.PATH_DB_REMOTE;
 import static de.flowwindustries.flowwfasttravel.config.DefaultConfiguration.PATH_DB_SHOW_SQL;
-import static de.flowwindustries.flowwfasttravel.config.DefaultConfiguration.PATH_DB_USERNAME;
+import static de.flowwindustries.flowwfasttravel.config.DefaultConfiguration.PATH_HIBERNATE_PROVIDER;
+import static de.flowwindustries.flowwfasttravel.config.DefaultConfiguration.PATH_JDBC_URL;
+import static de.flowwindustries.flowwfasttravel.config.DefaultConfiguration.PATH_JDBC_USER;
+import static de.flowwindustries.flowwfasttravel.config.DefaultConfiguration.PATH_JDBC_PASSWORD;
+import static de.flowwindustries.flowwfasttravel.config.DefaultConfiguration.PATH_JDBC_DRIVER;
+import static de.flowwindustries.flowwfasttravel.config.DefaultConfiguration.PATH_HIBERNATE_DDL;
+import static de.flowwindustries.flowwfasttravel.config.DefaultConfiguration.PATH_HIBERNATE_DIALECT;
 
 /**
  * Abstract class to provide easy functionality to access the persistence layer.
@@ -128,39 +129,43 @@ public abstract class AbstractRepository<E, I> {
      * @return the {@link EntityManager}
      * @throws RuntimeException if the {@link EntityManager} is not yet initialized
      */
-    protected EntityManager getEntityManager() throws RuntimeException {
+    protected EntityManager getEntityManager() throws IllegalStateException {
         setupEntityManagerFactory();
         if (entityManagerFactory != null && entityManagerFactory.isOpen()) {
             return entityManagerFactory.createEntityManager();
         } else {
-            throw new RuntimeException("Entity Manager not initialized!");
+            throw new IllegalStateException("Entity Manager not initialized!");
         }
     }
 
     private void setupEntityManagerFactory() {
         if (entityManagerFactory == null || !entityManagerFactory.isOpen()) {
-            boolean remoteDatabase = ConfigurationUtils.read(Boolean.class, PATH_DB_REMOTE);
-            boolean showSQL = ConfigurationUtils.read(Boolean.class, PATH_DB_SHOW_SQL);
-            String ddlAuto = ConfigurationUtils.read(String.class, PATH_DB_DDL);
+            final boolean remoteDatabase = ConfigurationUtils.read(Boolean.class, PATH_DB_REMOTE);
+            final boolean showSQL = ConfigurationUtils.read(Boolean.class, PATH_DB_SHOW_SQL);
+            final String ddlAuto = ConfigurationUtils.read(String.class, PATH_HIBERNATE_DDL);
+            final String hibernateConnectionProvider = ConfigurationUtils.read(String.class, PATH_HIBERNATE_PROVIDER);
 
             Properties properties = new Properties();
             properties.put("hibernate.show_sql", showSQL);
             properties.put("hibernate.hbm2ddl.auto", ddlAuto);
-            properties.put("hibernate.connection.provider_class", "org.hibernate.hikaricp.internal.HikariCPConnectionProvider");
+            properties.put("hibernate.connection.provider_class", hibernateConnectionProvider);
 
-            if (remoteDatabase) { // Setup MariaDB Connection
-                String databaseHost = ConfigurationUtils.read(String.class, PATH_DB_HOST);
-                int databasePort = ConfigurationUtils.read(Integer.class, PATH_DB_PORT);
-                String databaseName = ConfigurationUtils.read(String.class, PATH_DB_DATABASE);
-                String databaseUsername = ConfigurationUtils.read(String.class, PATH_DB_USERNAME);
-                String databasePassword = ConfigurationUtils.read(String.class, PATH_DB_PASSWORD);
+            if (remoteDatabase) {
+                // Setup Remote DB Connection
+                final String jdbcUrl = ConfigurationUtils.read(String.class, PATH_JDBC_URL);
+                final String jdbcUser = ConfigurationUtils.read(String.class, PATH_JDBC_USER);
+                final String jdbcPassword = ConfigurationUtils.read(String.class, PATH_JDBC_PASSWORD);
+                final String jdbcDriver = ConfigurationUtils.read(String.class, PATH_JDBC_DRIVER);
+                final String hibernateDialect = ConfigurationUtils.read(String.class, PATH_HIBERNATE_DIALECT);
 
-                properties.put("jakarta.persistence.jdbc.driver", "org.mariadb.jdbc.Driver");
-                properties.put("jakarta.persistence.jdbc.url", "jdbc:mariadb://" + databaseHost + ":" + databasePort + "/" + databaseName + "?autoReconnect=true");
-                properties.put("jakarta.persistence.jdbc.user", databaseUsername);
-                properties.put("jakarta.persistence.jdbc.password", databasePassword);
-                properties.put("hibernate.dialect", "org.hibernate.dialect.MariaDBDialect");
-            } else { // Setup H2 Connection
+                properties.put("jakarta.persistence.jdbc.driver", jdbcDriver);
+                properties.put("jakarta.persistence.jdbc.url", jdbcUrl);
+                properties.put("jakarta.persistence.jdbc.user", jdbcUser);
+                properties.put("jakarta.persistence.jdbc.password", jdbcPassword);
+                properties.put("hibernate.dialect", hibernateDialect);
+
+            } else {
+                // Setup H2 Connection
                 properties.put("javax.persistence.jdbc.driver", "org.h2.Driver");
                 properties.put("javax.persistence.jdbc.url", "jdbc:h2:file:~/test;USER=sa;PASSWORD=password");
                 properties.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");

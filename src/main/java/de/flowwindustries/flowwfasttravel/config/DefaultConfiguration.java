@@ -12,13 +12,15 @@ public class DefaultConfiguration {
 
     public static final String PATH_DB_REMOTE = "database.remote";
     public static final String PATH_DB_SHOW_SQL = "database.show-sql";
-    public static final String PATH_DB_DDL = "database.ddl-auto";
-    public static final String PATH_DB_HOST = "database.host";
-    public static final String PATH_DB_PORT = "database.port";
-    public static final String PATH_DB_DATABASE = "database.database";
-    public static final String PATH_DB_USERNAME = "database.username";
-    public static final String PATH_DB_PASSWORD = "database.password";
-    public static final String PATH_DB_DRIVER = "database.driverClass";
+
+    public static final String PATH_JDBC_URL = "database.jdbc.url";
+    public static final String PATH_JDBC_USER = "database.jdbc.user";
+    public static final String PATH_JDBC_PASSWORD = "database.jdbc.password";
+    public static final String PATH_JDBC_DRIVER = "database.jdbc.driverClass";
+
+    public static final String PATH_HIBERNATE_DDL = "hibernate.ddl-auto";
+    public static final String PATH_HIBERNATE_DIALECT = "hibernate.dialect";
+    public static final String PATH_HIBERNATE_PROVIDER = "hibernate.provider";
 
     private DefaultConfiguration() {
 
@@ -33,14 +35,15 @@ public class DefaultConfiguration {
         //Setup values
         configuration.addDefault(PATH_DB_REMOTE, true);
         configuration.addDefault(PATH_DB_SHOW_SQL, false);
-        configuration.addDefault(PATH_DB_DDL, "update");
 
-        configuration.addDefault(PATH_DB_HOST, "localhost");
-        configuration.addDefault(PATH_DB_PORT, 3306);
-        configuration.addDefault(PATH_DB_DATABASE, "sa");
-        configuration.addDefault(PATH_DB_USERNAME, "fasttravel");
-        configuration.addDefault(PATH_DB_PASSWORD, "MyPassw0rd!");
-        configuration.addDefault(PATH_DB_DRIVER, "org.postgresql.Driver");
+        configuration.addDefault(PATH_JDBC_URL, "jdbc:postgresql://localhost:5432/fasttravel");
+        configuration.addDefault(PATH_JDBC_USER, "sa");
+        configuration.addDefault(PATH_JDBC_PASSWORD, "MyPassw0rd!");
+        configuration.addDefault(PATH_JDBC_DRIVER, "org.postgresql.Driver");
+
+        configuration.addDefault(PATH_HIBERNATE_DDL, "update");
+        configuration.addDefault(PATH_HIBERNATE_DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
+        configuration.addDefault(PATH_HIBERNATE_PROVIDER, "org.hibernate.hikaricp.internal.HikariCPConnectionProvider");
 
         //Save configuration
         configuration.options().copyDefaults(true);

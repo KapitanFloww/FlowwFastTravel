@@ -25,7 +25,7 @@ import java.time.Instant;
 @Table(name = "waypoints", uniqueConstraints = {
         @UniqueConstraint(
                 name = "uk_waypoints_name_world",
-                columnNames = "name, world"
+                columnNames = {"name", "world"}
         )}
 )
 public class Waypoint {
