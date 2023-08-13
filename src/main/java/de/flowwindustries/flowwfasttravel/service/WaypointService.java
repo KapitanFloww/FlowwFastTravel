@@ -1,7 +1,7 @@
-package de.flowwindustries.flowfasttravel.service;
+package de.flowwindustries.flowwfasttravel.service;
 
-import de.flowwindustries.flowfasttravel.domain.Waypoint;
-import de.flowwindustries.flowfasttravel.repository.WaypointRepository;
+import de.flowwindustries.flowwfasttravel.domain.Waypoint;
+import de.flowwindustries.flowwfasttravel.repository.WaypointRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;

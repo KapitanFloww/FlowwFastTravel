@@ -1,6 +1,6 @@
-name: FlowFastTravel
+name: FlowwFastTravel
 version: '${project.version}'
-main: de.flowwindustries.flowfasttravel.FlowFastTravel
+main: de.flowwindustries.flowwfasttravel.FlowFastTravel
 api-version: 1.20
 prefix: FastTravel
 authors: [ Kapitan_Floww ]

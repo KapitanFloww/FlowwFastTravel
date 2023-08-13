@@ -1,6 +1,6 @@
-package de.flowwindustries.flowfasttravel.config;
+package de.flowwindustries.flowwfasttravel.config;
 
-import de.flowwindustries.flowfasttravel.FlowFastTravel;
+import de.flowwindustries.flowwfasttravel.FlowFastTravel;
 import lombok.extern.java.Log;
 import org.bukkit.configuration.file.FileConfiguration;
 

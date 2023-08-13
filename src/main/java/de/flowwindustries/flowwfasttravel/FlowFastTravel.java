@@ -1,11 +1,11 @@
-package de.flowwindustries.flowfasttravel;
+package de.flowwindustries.flowwfasttravel;
 
-import de.flowwindustries.flowfasttravel.command.FastTravelCommand;
-import de.flowwindustries.flowfasttravel.command.WaypointCommand;
-import de.flowwindustries.flowfasttravel.config.DefaultConfiguration;
-import de.flowwindustries.flowfasttravel.domain.Waypoint;
-import de.flowwindustries.flowfasttravel.repository.WaypointRepository;
-import de.flowwindustries.flowfasttravel.service.WaypointService;
+import de.flowwindustries.flowwfasttravel.command.FastTravelCommand;
+import de.flowwindustries.flowwfasttravel.command.WaypointCommand;
+import de.flowwindustries.flowwfasttravel.config.DefaultConfiguration;
+import de.flowwindustries.flowwfasttravel.domain.Waypoint;
+import de.flowwindustries.flowwfasttravel.repository.WaypointRepository;
+import de.flowwindustries.flowwfasttravel.service.WaypointService;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 

@@ -6,7 +6,7 @@
              version="2.1">
     <persistence-unit name="persistence-unit" transaction-type="RESOURCE_LOCAL">
 
-        <class>de.flowwindustries.flowfasttravel.domain.Waypoint</class>
+        <class>de.flowwindustries.flowwfasttravel.domain.Waypoint</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
         <properties>

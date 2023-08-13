@@ -1,8 +1,8 @@
-package de.flowwindustries.flowfasttravel.command;
+package de.flowwindustries.flowwfasttravel.command;
 
-import de.flowwindustries.flowfasttravel.domain.Waypoint;
-import de.flowwindustries.flowfasttravel.service.WaypointService;
-import de.flowwindustries.flowfasttravel.utils.SpigotUtils;
+import de.flowwindustries.flowwfasttravel.domain.Waypoint;
+import de.flowwindustries.flowwfasttravel.service.WaypointService;
+import de.flowwindustries.flowwfasttravel.utils.SpigotUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.bukkit.ChatColor;

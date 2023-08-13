@@ -1,6 +1,6 @@
-package de.flowwindustries.flowfasttravel.utils;
+package de.flowwindustries.flowwfasttravel.utils;
 
-import de.flowwindustries.flowfasttravel.FlowFastTravel;
+import de.flowwindustries.flowwfasttravel.FlowFastTravel;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;

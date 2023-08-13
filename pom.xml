@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.floww-industries</groupId>
-    <artifactId>flowFastTravel</artifactId>
+    <artifactId>flowwFastTravel</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>FlowFastTravel</name>
+    <name>FlowwFastTravel</name>
     <description>FastTraveling for Spigot Servers</description>
     <url>floww-industries.de</url>
 

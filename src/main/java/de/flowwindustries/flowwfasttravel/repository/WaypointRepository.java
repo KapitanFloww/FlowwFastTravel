@@ -1,6 +1,6 @@
-package de.flowwindustries.flowfasttravel.repository;
+package de.flowwindustries.flowwfasttravel.repository;
 
-import de.flowwindustries.flowfasttravel.domain.Waypoint;
+import de.flowwindustries.flowwfasttravel.domain.Waypoint;
 
 /**
  * Waypoint Repository.

@@ -1,11 +1,11 @@
-package de.flowwindustries.flowfasttravel.command;
+package de.flowwindustries.flowwfasttravel.command;
 
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.OutlinePane;
-import de.flowwindustries.flowfasttravel.domain.Waypoint;
-import de.flowwindustries.flowfasttravel.service.WaypointService;
-import de.flowwindustries.flowfasttravel.utils.SpigotUtils;
+import de.flowwindustries.flowwfasttravel.domain.Waypoint;
+import de.flowwindustries.flowwfasttravel.service.WaypointService;
+import de.flowwindustries.flowwfasttravel.utils.SpigotUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.bukkit.ChatColor;

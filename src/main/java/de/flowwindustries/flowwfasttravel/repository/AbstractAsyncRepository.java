@@ -1,8 +1,8 @@
-package de.flowwindustries.flowfasttravel.repository;
+package de.flowwindustries.flowwfasttravel.repository;
 
-import de.flowwindustries.flowfasttravel.repository.callbacks.AsyncCallbackExceptionHandler;
-import de.flowwindustries.flowfasttravel.repository.callbacks.AsyncCallbackObject;
-import de.flowwindustries.flowfasttravel.repository.callbacks.AsyncCallbackObjectCollection;
+import de.flowwindustries.flowwfasttravel.repository.callbacks.AsyncCallbackExceptionHandler;
+import de.flowwindustries.flowwfasttravel.repository.callbacks.AsyncCallbackObject;
+import de.flowwindustries.flowwfasttravel.repository.callbacks.AsyncCallbackObjectCollection;
 
 /**
  * Abstract class to provide easy functionality to access the persistence layer (asynchronously).

@@ -1,6 +1,6 @@
-package de.flowwindustries.flowfasttravel.repository;
+package de.flowwindustries.flowwfasttravel.repository;
 
-import de.flowwindustries.flowfasttravel.config.ConfigurationUtils;
+import de.flowwindustries.flowwfasttravel.config.ConfigurationUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
@@ -13,14 +13,14 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.Properties;
 
-import static de.flowwindustries.flowfasttravel.config.DefaultConfiguration.PATH_DB_DATABASE;
-import static de.flowwindustries.flowfasttravel.config.DefaultConfiguration.PATH_DB_DDL;
-import static de.flowwindustries.flowfasttravel.config.DefaultConfiguration.PATH_DB_HOST;
-import static de.flowwindustries.flowfasttravel.config.DefaultConfiguration.PATH_DB_PASSWORD;
-import static de.flowwindustries.flowfasttravel.config.DefaultConfiguration.PATH_DB_PORT;
-import static de.flowwindustries.flowfasttravel.config.DefaultConfiguration.PATH_DB_REMOTE;
-import static de.flowwindustries.flowfasttravel.config.DefaultConfiguration.PATH_DB_SHOW_SQL;
-import static de.flowwindustries.flowfasttravel.config.DefaultConfiguration.PATH_DB_USERNAME;
+import static de.flowwindustries.flowwfasttravel.config.DefaultConfiguration.PATH_DB_DATABASE;
+import static de.flowwindustries.flowwfasttravel.config.DefaultConfiguration.PATH_DB_DDL;
+import static de.flowwindustries.flowwfasttravel.config.DefaultConfiguration.PATH_DB_HOST;
+import static de.flowwindustries.flowwfasttravel.config.DefaultConfiguration.PATH_DB_PASSWORD;
+import static de.flowwindustries.flowwfasttravel.config.DefaultConfiguration.PATH_DB_PORT;
+import static de.flowwindustries.flowwfasttravel.config.DefaultConfiguration.PATH_DB_REMOTE;
+import static de.flowwindustries.flowwfasttravel.config.DefaultConfiguration.PATH_DB_SHOW_SQL;
+import static de.flowwindustries.flowwfasttravel.config.DefaultConfiguration.PATH_DB_USERNAME;
 
 /**
  * Abstract class to provide easy functionality to access the persistence layer.

@@ -1,4 +1,4 @@
-package de.flowwindustries.flowfasttravel.repository.callbacks;
+package de.flowwindustries.flowwfasttravel.repository.callbacks;
 
 import java.util.Optional;
 
