@@ -10,7 +10,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 @Log
 public class ConfigurationUtils {
 
-    private final static FileConfiguration fileConfiguration = FlowFastTravel.getInstance().getConfig();
+    private static final FileConfiguration fileConfiguration = FlowFastTravel.getInstance().getConfig();
+
+    private ConfigurationUtils() {
+
+    }
 
     /**
      * Write a value to the configuration.
@@ -32,11 +36,11 @@ public class ConfigurationUtils {
     public static <T> T read(Class<T> clazz, String path) {
         Object payload = fileConfiguration.get(path);
         if(payload == null) {
-            throw new RuntimeException("No configuration value found for path: " + path);
+            throw new IllegalArgumentException("No configuration value found for path: " + path);
         }
         if(clazz.isInstance(payload)) {
             return (T) payload;
         }
-        throw new RuntimeException("Invalid value type on path: " + path);
+        throw new IllegalStateException("Invalid value type on path: " + path);
     }
 }

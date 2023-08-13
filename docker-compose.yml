@@ -1,11 +1,11 @@
+version: '3.1'
+
 services:
   database:
-    image: mariadb:latest
+    image: postgres
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_USER: root
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: fasttravel
-      MYSQL_USER: fasttravel
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      POSTGRES_DB: fasttravel
+      POSTGRES_USER: sa
+      POSTGRES_PASSWORD: MyPassw0rd!

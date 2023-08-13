@@ -29,14 +29,18 @@ import java.util.function.BiConsumer;
 @RequiredArgsConstructor
 public class FastTravelCommand implements CommandExecutor {
 
-    protected static final String INVALID_ARGUMENTS = "Invalid arguments: %s";
+    public static final String INVALID_ARGUMENTS = "Invalid arguments: %s";
     public static final String META_NOT_NULL = "ItemMeta must not be null";
     public static final String WAYPOINT_NAME_FORMAT = "§6§l";
+
     private final WaypointService waypointService;
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player player) {
+            if (!player.hasPermission("floww.fasttravel.travel")) {
+                throw new IllegalArgumentException("Player is lacking permission to execute this command");
+            }
             try {
                 if(args.length == 0) {
                     executeGuiCommand(player);
@@ -54,15 +58,15 @@ public class FastTravelCommand implements CommandExecutor {
     }
 
     private void executeFastTravelCommand(String waypointName, Player player) {
-        Waypoint waypoint = waypointService.getSafe(waypointName);
+        Waypoint waypoint = waypointService.getWaypoint(waypointName);
 
-        Location waypointLocation = new Location(SpigotUtils.getWorldSafe(waypoint.getWorldName()), waypoint.getX(), waypoint.getY(), waypoint.getZ());
+        Location waypointLocation = new Location(SpigotUtils.getWorldSafe(waypoint.getWorld()), waypoint.getX(), waypoint.getY(), waypoint.getZ());
         player.teleport(waypointLocation);
         SpigotUtils.sendPlayerMessage(player, String.format("%sWelcome to %s%s", ChatColor.YELLOW, ChatColor.GOLD, waypoint.getName()));
     }
 
     private void executeGuiCommand(Player player) {
-        Collection<Waypoint> waypoints = waypointService.getAll();
+        Collection<Waypoint> waypoints = waypointService.getAllWaypoints();
         int quote = (waypoints.size() / 9);
         int rows = quote == 0 ? 1 : quote;
 
@@ -81,7 +85,7 @@ public class FastTravelCommand implements CommandExecutor {
                     .orElseThrow(() -> new IllegalStateException(META_NOT_NULL));
             String name = String.format(WAYPOINT_NAME_FORMAT + "%s", waypoint.getName());
             String tag = String.format("§f%s (Costs: %s)", waypoint.getDescription(), waypoint.getCost());
-            String world = String.format("§f%s", waypoint.getWorldName());
+            String world = String.format("§f%s", waypoint.getWorld());
 
             meta.setDisplayName(name);
             meta.setLore(List.of(tag, world));

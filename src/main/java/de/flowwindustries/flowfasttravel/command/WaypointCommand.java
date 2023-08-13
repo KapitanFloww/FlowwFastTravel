@@ -66,14 +66,14 @@ public class WaypointCommand implements CommandExecutor {
     private void executeListCommandIntern(Player player, String worldName) {
         if(worldName == null) {
             SpigotUtils.sendPlayerMessage(player, ChatColor.YELLOW + "Waypoints:");
-            waypointService.getAll().forEach(waypoint -> {
+            waypointService.getAllWaypoints().forEach(waypoint -> {
                 String msg = String.format("%s%s %s| %s%s %s%s | (%s)", ChatColor.GOLD, waypoint.getName(), ChatColor.YELLOW, ChatColor.ITALIC, waypoint.getDescription(), ChatColor.RESET, ChatColor.YELLOW, waypoint.getCost());
                 SpigotUtils.sendPlayerMessage(player, ChatColor.YELLOW + msg);
             });
         } else {
             player.sendMessage(ChatColor.YELLOW + "Waypoints of World " + ChatColor.GOLD + worldName + ChatColor.YELLOW + ":");
-            waypointService.getAll().stream()
-                    .filter(waypoint -> waypoint.getWorldName().equals(worldName))
+            waypointService.getAllWaypoints().stream()
+                    .filter(waypoint -> waypoint.getWorld().equals(worldName))
                     .forEach(waypoint -> {
                         String msg = String.format("%s%s %s| %s%s %s%s | (%s)", ChatColor.GOLD, waypoint.getName(), ChatColor.YELLOW, ChatColor.ITALIC, waypoint.getDescription(), ChatColor.RESET, ChatColor.YELLOW, waypoint.getCost());
                         SpigotUtils.sendPlayerMessage(player, ChatColor.YELLOW + msg);
@@ -82,19 +82,21 @@ public class WaypointCommand implements CommandExecutor {
     }
 
     private void executeCreateCommand(String[] args, Player player) {
+        if (!player.hasPermission("floww.fasttravel.waypoint")) {
+            throw new IllegalArgumentException("Player is lacking permission to execute this command");
+        }
         assertArgumentMatch(args, 0, "create");
         try {
             float costs = Float.parseFloat(args[3]);
-            Waypoint waypoint = new Waypoint(
-                    args[1],
-                    args[2],
-                    costs,
-                    player.getLocation().getX(),
-                    player.getLocation().getY(),
-                    player.getLocation().getZ(),
-                    player.getWorld().getName()
-            );
-            waypointService.create(waypoint);
+            Waypoint waypoint = new Waypoint()
+                    .withName(args[1])
+                    .withDescription(args[2])
+                    .withCost(costs)
+                    .withX(player.getLocation().getX())
+                    .withY(player.getLocation().getY())
+                    .withZ(player.getLocation().getZ())
+                    .withWorld(player.getWorld().getName());
+            waypointService.createWaypoint(waypoint);
             SpigotUtils.sendPlayerMessage(player, String.format("%sCreated waypoint: %s%s", ChatColor.YELLOW, ChatColor.GOLD, waypoint.getName()));
         } catch (NumberFormatException ex) {
             throw new IllegalArgumentException(String.format(INVALID_ARGUMENTS, args[3]));

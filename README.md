@@ -33,7 +33,8 @@ The following commands are available in-game:
 
 | Command                     | Permission    | Description                                             |
 |-----------------------------|---------------|---------------------------------------------------------|
-| `tbd`                    | `tbd` | tbd |
+| `wp`                    | `floww.fasttravel.waypoint` | Waypoint Command to create, list, update and delete waypoints |
+| `ft`                    | `floww.fasttravel.travel` | Command to fast travel to a location |
 
 > `()`-args are **required**, while `[]`-args are optional :mag_right:
 

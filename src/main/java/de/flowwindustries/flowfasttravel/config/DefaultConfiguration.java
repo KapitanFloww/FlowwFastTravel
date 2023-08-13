@@ -9,14 +9,20 @@ import org.bukkit.configuration.file.FileConfiguration;
  */
 @Log
 public class DefaultConfiguration {
+
     public static final String PATH_DB_REMOTE = "database.remote";
     public static final String PATH_DB_SHOW_SQL = "database.show-sql";
     public static final String PATH_DB_DDL = "database.ddl-auto";
-    public static final String PATH_DB_HOST = "database.mariadb.host";
-    public static final String PATH_DB_PORT = "database.mariadb.port";
-    public static final String PATH_DB_DATABASE = "database.mariadb.database";
-    public static final String PATH_DB_USERNAME = "database.mariadb.username";
-    public static final String PATH_DB_PASSWORD = "database.mariadb.password";
+    public static final String PATH_DB_HOST = "database.host";
+    public static final String PATH_DB_PORT = "database.port";
+    public static final String PATH_DB_DATABASE = "database.database";
+    public static final String PATH_DB_USERNAME = "database.username";
+    public static final String PATH_DB_PASSWORD = "database.password";
+    public static final String PATH_DB_DRIVER = "database.driverClass";
+
+    private DefaultConfiguration() {
+
+    }
 
     /**
      * Setup default configuration values for the given {@link FileConfiguration}.
@@ -31,9 +37,10 @@ public class DefaultConfiguration {
 
         configuration.addDefault(PATH_DB_HOST, "localhost");
         configuration.addDefault(PATH_DB_PORT, 3306);
-        configuration.addDefault(PATH_DB_DATABASE, "user");
-        configuration.addDefault(PATH_DB_USERNAME, "database");
-        configuration.addDefault(PATH_DB_PASSWORD, "password");
+        configuration.addDefault(PATH_DB_DATABASE, "sa");
+        configuration.addDefault(PATH_DB_USERNAME, "fasttravel");
+        configuration.addDefault(PATH_DB_PASSWORD, "MyPassw0rd!");
+        configuration.addDefault(PATH_DB_DRIVER, "org.postgresql.Driver");
 
         //Save configuration
         configuration.options().copyDefaults(true);
