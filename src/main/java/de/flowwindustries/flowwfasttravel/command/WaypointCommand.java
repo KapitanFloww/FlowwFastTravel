@@ -41,7 +41,7 @@ public class WaypointCommand implements CommandExecutor, TabCompleter {
                         }
                     }
                     case 2 -> executeListCommand(args, player); //wp list <worldName>
-                    case 3 -> executeCreateCommand(args, player); //wp create <name> <cost>
+                    case 4 -> executeCreateCommand(args, player); //wp create <name> <cost>
                     default -> throw new IllegalArgumentException(String.format(INVALID_ARGUMENTS, ""));
                 }
                 return true;
@@ -57,7 +57,7 @@ public class WaypointCommand implements CommandExecutor, TabCompleter {
         SpigotUtils.sendPlayerMessage(player, String.format("%s/ft <name> %s- %sFast travel to a location", ChatColor.GOLD, ChatColor.GRAY, ChatColor.YELLOW));
         SpigotUtils.sendPlayerMessage(player, String.format("%s/wp help %s- %sDisplay this help", ChatColor.GOLD, ChatColor.GRAY, ChatColor.YELLOW));
         SpigotUtils.sendPlayerMessage(player, String.format("%s/wp list [world] %s- %sShow all waypoints [of given world]", ChatColor.GOLD, ChatColor.GRAY, ChatColor.YELLOW));
-        SpigotUtils.sendPlayerMessage(player, String.format("%s/wp create <name> <cost> %s- %sCrate a new waypoint at your current location", ChatColor.GOLD, ChatColor.GRAY, ChatColor.YELLOW));
+        SpigotUtils.sendPlayerMessage(player, String.format("%s/wp create <name> <cost> <description> %s- %sCrate a new waypoint at your current location", ChatColor.GOLD, ChatColor.GRAY, ChatColor.YELLOW));
     }
 
     private void executeListCommand(String[] args, Player player) {
@@ -95,9 +95,11 @@ public class WaypointCommand implements CommandExecutor, TabCompleter {
         try {
             final String name = args[1];
             final float costs = Float.parseFloat(args[2]);
+            final String description = args[3];
             Waypoint waypoint = new Waypoint()
                     .withName(name)
                     .withCost(costs)
+                    .withDescription(description)
                     .withX(player.getLocation().getX())
                     .withY(player.getLocation().getY())
                     .withZ(player.getLocation().getZ())
