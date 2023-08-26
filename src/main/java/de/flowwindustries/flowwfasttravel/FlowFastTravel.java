@@ -28,6 +28,7 @@ public final class FlowFastTravel extends JavaPlugin {
         Clock clock = Clock.system(ZoneId.systemDefault());
         WaypointRepository waypointRepository = new WaypointRepository(Waypoint.class);
         WaypointService waypointService = new WaypointService(clock, waypointRepository);
+        waypointService.init();
 
         var wpCommand = Objects.requireNonNull(getCommand("wp"));
         wpCommand.setExecutor(new WaypointCommand(waypointService));

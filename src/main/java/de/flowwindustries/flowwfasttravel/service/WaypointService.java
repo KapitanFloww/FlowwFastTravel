@@ -79,6 +79,11 @@ public class WaypointService {
         waypointRepository.remove(waypoint);
     }
 
+    public void init() {
+        final long count = waypointRepository.findAll().size();
+        log.info("Found %s waypoints".formatted(count));
+    }
+
     private void assertUniqueName(String name) throws IllegalArgumentException {
         if(this.findWaypoint(name).isPresent()) {
             throw new IllegalArgumentException(String.format(DUPLICATE_WAYPOINT_ID, name));
