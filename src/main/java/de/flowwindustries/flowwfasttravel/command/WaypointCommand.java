@@ -5,17 +5,23 @@ import de.flowwindustries.flowwfasttravel.service.WaypointService;
 import de.flowwindustries.flowwfasttravel.utils.SpigotUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
+import java.time.Instant;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 @Log
 @RequiredArgsConstructor
-public class WaypointCommand implements CommandExecutor {
+public class WaypointCommand implements CommandExecutor, TabCompleter {
     protected static final String INVALID_ARGUMENTS = "Invalid arguments %s";
 
     private final WaypointService waypointService;
@@ -35,7 +41,7 @@ public class WaypointCommand implements CommandExecutor {
                         }
                     }
                     case 2 -> executeListCommand(args, player); //wp list <worldName>
-                    case 4 -> executeCreateCommand(args, player); //wp create <name> <region> <cost>
+                    case 3 -> executeCreateCommand(args, player); //wp create <name> <cost>
                     default -> throw new IllegalArgumentException(String.format(INVALID_ARGUMENTS, ""));
                 }
                 return true;
@@ -49,9 +55,9 @@ public class WaypointCommand implements CommandExecutor {
     private void executeHelpCommand(Player player) {
         SpigotUtils.sendPlayerMessage(player, String.format("%sFastTravel Commands:", ChatColor.GOLD));
         SpigotUtils.sendPlayerMessage(player, String.format("%s/ft <name> %s- %sFast travel to a location", ChatColor.GOLD, ChatColor.GRAY, ChatColor.YELLOW));
-        SpigotUtils.sendPlayerMessage(player, String.format("%s/wp <help>%s - %sDisplay this help", ChatColor.GOLD, ChatColor.GRAY, ChatColor.YELLOW));
-        SpigotUtils.sendPlayerMessage(player, String.format("%s/wp <list> [world] %s- %sShow all waypoints [of given world]", ChatColor.GOLD, ChatColor.GRAY, ChatColor.YELLOW));
-        SpigotUtils.sendPlayerMessage(player, String.format("%s/wp <create> <name> <tag> <cost> %s- %sCrate a new waypoint at your current location", ChatColor.GOLD, ChatColor.GRAY, ChatColor.YELLOW));
+        SpigotUtils.sendPlayerMessage(player, String.format("%s/wp help %s- %sDisplay this help", ChatColor.GOLD, ChatColor.GRAY, ChatColor.YELLOW));
+        SpigotUtils.sendPlayerMessage(player, String.format("%s/wp list [world] %s- %sShow all waypoints [of given world]", ChatColor.GOLD, ChatColor.GRAY, ChatColor.YELLOW));
+        SpigotUtils.sendPlayerMessage(player, String.format("%s/wp create <name> <cost> %s- %sCrate a new waypoint at your current location", ChatColor.GOLD, ChatColor.GRAY, ChatColor.YELLOW));
     }
 
     private void executeListCommand(String[] args, Player player) {
@@ -87,19 +93,20 @@ public class WaypointCommand implements CommandExecutor {
         }
         assertArgumentMatch(args, 0, "create");
         try {
-            float costs = Float.parseFloat(args[3]);
+            final String name = args[1];
+            final float costs = Float.parseFloat(args[2]);
             Waypoint waypoint = new Waypoint()
-                    .withName(args[1])
-                    .withDescription(args[2])
+                    .withName(name)
                     .withCost(costs)
                     .withX(player.getLocation().getX())
                     .withY(player.getLocation().getY())
                     .withZ(player.getLocation().getZ())
-                    .withWorld(player.getWorld().getName());
+                    .withWorld(player.getWorld().getName())
+                    .withCreatedAt(Instant.now());
             waypointService.createWaypoint(waypoint);
             SpigotUtils.sendPlayerMessage(player, String.format("%sCreated waypoint: %s%s", ChatColor.YELLOW, ChatColor.GOLD, waypoint.getName()));
         } catch (NumberFormatException ex) {
-            throw new IllegalArgumentException(String.format(INVALID_ARGUMENTS, args[3]));
+            throw new IllegalArgumentException(String.format(INVALID_ARGUMENTS, args[2]));
         }
     }
 
@@ -107,5 +114,16 @@ public class WaypointCommand implements CommandExecutor {
         if(!args[pos].toLowerCase(Locale.ROOT).equals(argument.toLowerCase(Locale.ROOT))) {
             throw new IllegalArgumentException(String.format(INVALID_ARGUMENTS, args[pos]));
         }
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+        if (args.length == 1) {
+            return List.of("create", "list", "help");
+        }
+        if (args.length == 2 && args[0].equalsIgnoreCase("list")) {
+            return Bukkit.getWorlds().stream().map(World::getName).toList();
+        }
+        return Collections.emptyList();
     }
 }

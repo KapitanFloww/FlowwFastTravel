@@ -29,8 +29,13 @@ public final class FlowFastTravel extends JavaPlugin {
         WaypointRepository waypointRepository = new WaypointRepository(Waypoint.class);
         WaypointService waypointService = new WaypointService(clock, waypointRepository);
 
-        Objects.requireNonNull(getCommand("wp")).setExecutor(new WaypointCommand(waypointService));
-        Objects.requireNonNull(getCommand("ft")).setExecutor(new FastTravelCommand(waypointService));
+        var wpCommand = Objects.requireNonNull(getCommand("wp"));
+        wpCommand.setExecutor(new WaypointCommand(waypointService));
+        wpCommand.setTabCompleter(new WaypointCommand(waypointService));
+
+        var ftCommand = Objects.requireNonNull(getCommand("ft"));
+        ftCommand.setExecutor(new FastTravelCommand(waypointService));
+        ftCommand.setTabCompleter(new FastTravelCommand(waypointService));
     }
 
     @Override

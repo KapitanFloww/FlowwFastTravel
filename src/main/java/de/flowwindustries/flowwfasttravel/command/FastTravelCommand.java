@@ -14,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -27,7 +28,7 @@ import java.util.function.BiConsumer;
 
 @Log
 @RequiredArgsConstructor
-public class FastTravelCommand implements CommandExecutor {
+public class FastTravelCommand implements CommandExecutor, TabCompleter {
 
     public static final String INVALID_ARGUMENTS = "Invalid arguments: %s";
     public static final String META_NOT_NULL = "ItemMeta must not be null";
@@ -121,4 +122,9 @@ public class FastTravelCommand implements CommandExecutor {
             executeFastTravelCommand(name, player);
         }
     };
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+        return waypointService.getAllWaypoints().stream().map(Waypoint::getName).toList();
+    }
 }
