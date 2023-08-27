@@ -37,11 +37,20 @@ public class WaypointCommand implements CommandExecutor, TabCompleter {
                             executeHelpCommand(player);
                         } else if(args[0].equalsIgnoreCase("list")) {
                             executeListCommand(args, player); //wp list
+                        } else {
+                            throw new IllegalArgumentException(INVALID_ARGUMENTS);
                         }
-                        throw new IllegalArgumentException(INVALID_ARGUMENTS);
                     }
-                    case 2 -> executeListCommand(args, player); //wp list <worldName>
-                    case 4 -> executeCreateCommand(args, player); //wp create <name> <cost> <description>
+                    case 2 -> {
+                        if (args[0].equalsIgnoreCase("list")) {
+                            executeListCommand(args, player);
+                        } else if (args[0].equalsIgnoreCase("create")) {
+                            executeCreateCommand(args, player); //wp create <name>
+                        } else {
+                            throw new IllegalArgumentException(INVALID_ARGUMENTS);
+                        }
+                    }
+                    case 3 -> executeCreateCommand(args, player); //wp create <name> [cost]
                     default -> throw new IllegalArgumentException(WaypointCommand.INVALID_ARGUMENTS);
                 }
                 return true;
@@ -57,7 +66,7 @@ public class WaypointCommand implements CommandExecutor, TabCompleter {
         SpigotUtils.sendPlayerMessage(player, String.format("%s/ft <name> %s- %sFast travel to a location", ChatColor.GOLD, ChatColor.GRAY, ChatColor.YELLOW));
         SpigotUtils.sendPlayerMessage(player, String.format("%s/wp help %s- %sDisplay this help", ChatColor.GOLD, ChatColor.GRAY, ChatColor.YELLOW));
         SpigotUtils.sendPlayerMessage(player, String.format("%s/wp list [world] %s- %sShow all waypoints [of given world]", ChatColor.GOLD, ChatColor.GRAY, ChatColor.YELLOW));
-        SpigotUtils.sendPlayerMessage(player, String.format("%s/wp create <name> <cost> <description> %s- %sCrate a new waypoint at your current location", ChatColor.GOLD, ChatColor.GRAY, ChatColor.YELLOW));
+        SpigotUtils.sendPlayerMessage(player, String.format("%s/wp create <name> [cost] %s- %sCrate a new waypoint at your current location", ChatColor.GOLD, ChatColor.GRAY, ChatColor.YELLOW));
     }
 
     private void executeListCommand(String[] args, Player player) {
@@ -72,18 +81,12 @@ public class WaypointCommand implements CommandExecutor, TabCompleter {
     private void executeListCommandIntern(Player player, String worldName) {
         if(worldName == null) {
             SpigotUtils.sendPlayerMessage(player, ChatColor.YELLOW + "Waypoints:");
-            waypointService.getAll().forEach(waypoint -> {
-                String msg = String.format("%s%s %s| %s%s %s%s | (%s)", ChatColor.GOLD, waypoint.getName(), ChatColor.YELLOW, ChatColor.ITALIC, waypoint.getDescription(), ChatColor.RESET, ChatColor.YELLOW, waypoint.getCost());
-                SpigotUtils.sendPlayerMessage(player, ChatColor.YELLOW + msg);
-            });
+            waypointService.getAll().forEach(waypoint -> sendWaypointMessage(waypoint, player));
         } else {
             player.sendMessage(ChatColor.YELLOW + "Waypoints of World " + ChatColor.GOLD + worldName + ChatColor.YELLOW + ":");
             waypointService.getAll().stream()
                     .filter(waypoint -> waypoint.getWorld().equals(worldName))
-                    .forEach(waypoint -> {
-                        String msg = String.format("%s%s %s| %s%s %s%s | (%s)", ChatColor.GOLD, waypoint.getName(), ChatColor.YELLOW, ChatColor.ITALIC, waypoint.getDescription(), ChatColor.RESET, ChatColor.YELLOW, waypoint.getCost());
-                        SpigotUtils.sendPlayerMessage(player, ChatColor.YELLOW + msg);
-                    });
+                    .forEach(waypoint -> sendWaypointMessage(waypoint, player));
         }
     }
 
@@ -94,12 +97,10 @@ public class WaypointCommand implements CommandExecutor, TabCompleter {
         Preconditions.checkArgument(args[0].equalsIgnoreCase("create"), WaypointCommand.INVALID_ARGUMENTS);
         try {
             final String name = args[1];
-            final float costs = Float.parseFloat(args[2]);
-            final String description = args[3];
+            final float costs = args.length == 3 ? Float.parseFloat(args[2]) : 0.0f;
             Waypoint waypoint = new Waypoint()
                     .withName(name)
                     .withCost(costs)
-                    .withDescription(description)
                     .withX(player.getLocation().getX())
                     .withY(player.getLocation().getY())
                     .withZ(player.getLocation().getZ())
@@ -108,7 +109,7 @@ public class WaypointCommand implements CommandExecutor, TabCompleter {
             waypointService.createWaypoint(waypoint);
             SpigotUtils.sendPlayerMessage(player, String.format("%sCreated waypoint: %s%s", ChatColor.YELLOW, ChatColor.GOLD, waypoint.getName()));
         } catch (NumberFormatException ex) {
-            throw new IllegalArgumentException("Invalid arguments. Use /wp create <name> <cost> <description>");
+            throw new IllegalArgumentException("Invalid arguments. Use /wp create <name> [cost]");
         }
     }
 
@@ -121,5 +122,10 @@ public class WaypointCommand implements CommandExecutor, TabCompleter {
             return Bukkit.getWorlds().stream().map(World::getName).toList();
         }
         return Collections.emptyList();
+    }
+
+    private void sendWaypointMessage(Waypoint waypoint, Player player) {
+        final String msg = String.format("%s%s %s| %s(%s)", ChatColor.GOLD, waypoint.getName(), ChatColor.RESET, ChatColor.YELLOW, waypoint.getCost());
+        SpigotUtils.sendPlayerMessage(player, ChatColor.YELLOW + msg);
     }
 }

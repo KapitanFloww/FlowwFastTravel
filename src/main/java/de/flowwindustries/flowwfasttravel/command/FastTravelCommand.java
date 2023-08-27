@@ -85,7 +85,7 @@ public class FastTravelCommand implements CommandExecutor, TabCompleter {
             ItemMeta meta = Optional.ofNullable(item.getItemMeta())
                     .orElseThrow(() -> new IllegalStateException(META_NOT_NULL));
             String name = String.format(WAYPOINT_NAME_FORMAT + "%s", waypoint.getName());
-            String tag = String.format("§f%s (Costs: %s)", waypoint.getDescription(), waypoint.getCost());
+            String tag = String.format("§f(Costs: %s)", waypoint.getCost());
             String world = String.format("§f%s", waypoint.getWorld());
 
             meta.setDisplayName(name);

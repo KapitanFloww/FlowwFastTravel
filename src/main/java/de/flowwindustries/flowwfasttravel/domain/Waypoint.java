@@ -67,12 +67,6 @@ public class Waypoint {
     @Column(name = "z", nullable = false, precision = 2)
     private Double z;
 
-    /**
-     * Description.
-     */
-    @Column(name = "description")
-    private String description;
-
     /*
      * Creation date.
      */

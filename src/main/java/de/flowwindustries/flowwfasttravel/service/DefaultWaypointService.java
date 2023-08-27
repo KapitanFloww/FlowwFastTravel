@@ -61,7 +61,6 @@ public class DefaultWaypointService implements WaypointService {
 
         // Update the waypoint
         oldWaypoint.setCost(waypoint.getCost());
-        oldWaypoint.setDescription(waypoint.getDescription());
         oldWaypoint.setWorld(waypoint.getWorld());
         oldWaypoint.setX(waypoint.getX());
         oldWaypoint.setY(waypoint.getY());
