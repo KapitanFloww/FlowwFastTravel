@@ -22,7 +22,9 @@ public class CachedWaypointService implements WaypointService {
 
     @Override
     public Waypoint createWaypoint(Waypoint waypoint) throws IllegalArgumentException {
-        return delegate.createWaypoint(waypoint);
+        final var savedWaypoint = delegate.createWaypoint(waypoint);
+        putCache(savedWaypoint);
+        return savedWaypoint;
     }
 
     @Override
