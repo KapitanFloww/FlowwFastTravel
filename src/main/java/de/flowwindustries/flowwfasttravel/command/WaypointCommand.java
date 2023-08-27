@@ -1,5 +1,6 @@
 package de.flowwindustries.flowwfasttravel.command;
 
+import com.google.common.base.Preconditions;
 import de.flowwindustries.flowwfasttravel.domain.Waypoint;
 import de.flowwindustries.flowwfasttravel.service.WaypointService;
 import de.flowwindustries.flowwfasttravel.utils.SpigotUtils;
@@ -17,12 +18,12 @@ import org.bukkit.entity.Player;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 @Log
 @RequiredArgsConstructor
 public class WaypointCommand implements CommandExecutor, TabCompleter {
-    protected static final String INVALID_ARGUMENTS = "Invalid arguments %s";
+
+    public static final String INVALID_ARGUMENTS = "Invalid arguments. Try /wp help";
 
     private final WaypointService waypointService;
 
@@ -36,13 +37,12 @@ public class WaypointCommand implements CommandExecutor, TabCompleter {
                             executeHelpCommand(player);
                         } else if(args[0].equalsIgnoreCase("list")) {
                             executeListCommand(args, player); //wp list
-                        } else {
-                            throw new IllegalArgumentException(String.format(INVALID_ARGUMENTS, args[0]));
                         }
+                        throw new IllegalArgumentException(INVALID_ARGUMENTS);
                     }
                     case 2 -> executeListCommand(args, player); //wp list <worldName>
-                    case 4 -> executeCreateCommand(args, player); //wp create <name> <cost>
-                    default -> throw new IllegalArgumentException(String.format(INVALID_ARGUMENTS, ""));
+                    case 4 -> executeCreateCommand(args, player); //wp create <name> <cost> <description>
+                    default -> throw new IllegalArgumentException(WaypointCommand.INVALID_ARGUMENTS);
                 }
                 return true;
             } catch (IllegalArgumentException ex) {
@@ -61,7 +61,7 @@ public class WaypointCommand implements CommandExecutor, TabCompleter {
     }
 
     private void executeListCommand(String[] args, Player player) {
-        assertArgumentMatch(args, 0, "list");
+        Preconditions.checkArgument(args[0].equalsIgnoreCase("list"), WaypointCommand.INVALID_ARGUMENTS);
         if (args.length == 1) {
             executeListCommandIntern(player, null);
         } else {
@@ -91,7 +91,7 @@ public class WaypointCommand implements CommandExecutor, TabCompleter {
         if (!player.hasPermission("floww.fasttravel.waypoint")) {
             throw new IllegalArgumentException("Player is lacking permission to execute this command");
         }
-        assertArgumentMatch(args, 0, "create");
+        Preconditions.checkArgument(args[0].equalsIgnoreCase("create"), WaypointCommand.INVALID_ARGUMENTS);
         try {
             final String name = args[1];
             final float costs = Float.parseFloat(args[2]);
@@ -108,13 +108,7 @@ public class WaypointCommand implements CommandExecutor, TabCompleter {
             waypointService.createWaypoint(waypoint);
             SpigotUtils.sendPlayerMessage(player, String.format("%sCreated waypoint: %s%s", ChatColor.YELLOW, ChatColor.GOLD, waypoint.getName()));
         } catch (NumberFormatException ex) {
-            throw new IllegalArgumentException(String.format(INVALID_ARGUMENTS, args[2]));
-        }
-    }
-
-    private void assertArgumentMatch(String[] args, int pos, String argument) {
-        if(!args[pos].toLowerCase(Locale.ROOT).equals(argument.toLowerCase(Locale.ROOT))) {
-            throw new IllegalArgumentException(String.format(INVALID_ARGUMENTS, args[pos]));
+            throw new IllegalArgumentException("Invalid arguments. Use /wp create <name> <cost> <description>");
         }
     }
 
