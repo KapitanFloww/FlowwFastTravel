@@ -72,13 +72,13 @@ public class WaypointCommand implements CommandExecutor, TabCompleter {
     private void executeListCommandIntern(Player player, String worldName) {
         if(worldName == null) {
             SpigotUtils.sendPlayerMessage(player, ChatColor.YELLOW + "Waypoints:");
-            waypointService.getAllWaypoints().forEach(waypoint -> {
+            waypointService.getAll().forEach(waypoint -> {
                 String msg = String.format("%s%s %s| %s%s %s%s | (%s)", ChatColor.GOLD, waypoint.getName(), ChatColor.YELLOW, ChatColor.ITALIC, waypoint.getDescription(), ChatColor.RESET, ChatColor.YELLOW, waypoint.getCost());
                 SpigotUtils.sendPlayerMessage(player, ChatColor.YELLOW + msg);
             });
         } else {
             player.sendMessage(ChatColor.YELLOW + "Waypoints of World " + ChatColor.GOLD + worldName + ChatColor.YELLOW + ":");
-            waypointService.getAllWaypoints().stream()
+            waypointService.getAll().stream()
                     .filter(waypoint -> waypoint.getWorld().equals(worldName))
                     .forEach(waypoint -> {
                         String msg = String.format("%s%s %s| %s%s %s%s | (%s)", ChatColor.GOLD, waypoint.getName(), ChatColor.YELLOW, ChatColor.ITALIC, waypoint.getDescription(), ChatColor.RESET, ChatColor.YELLOW, waypoint.getCost());

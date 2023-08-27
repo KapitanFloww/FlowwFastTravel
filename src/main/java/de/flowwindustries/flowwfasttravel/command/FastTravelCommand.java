@@ -67,7 +67,7 @@ public class FastTravelCommand implements CommandExecutor, TabCompleter {
     }
 
     private void executeGuiCommand(Player player) {
-        Collection<Waypoint> waypoints = waypointService.getAllWaypoints();
+        Collection<Waypoint> waypoints = waypointService.getAll();
         int quote = (waypoints.size() / 9);
         int rows = quote == 0 ? 1 : quote;
 
@@ -125,6 +125,6 @@ public class FastTravelCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-        return waypointService.getAllWaypoints().stream().map(Waypoint::getName).toList();
+        return waypointService.getAll().stream().map(Waypoint::getName).toList();
     }
 }

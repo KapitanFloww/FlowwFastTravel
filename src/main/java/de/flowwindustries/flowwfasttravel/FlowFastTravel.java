@@ -5,6 +5,8 @@ import de.flowwindustries.flowwfasttravel.command.WaypointCommand;
 import de.flowwindustries.flowwfasttravel.config.DefaultConfiguration;
 import de.flowwindustries.flowwfasttravel.domain.Waypoint;
 import de.flowwindustries.flowwfasttravel.repository.WaypointRepository;
+import de.flowwindustries.flowwfasttravel.service.CachedWaypointService;
+import de.flowwindustries.flowwfasttravel.service.DefaultWaypointService;
 import de.flowwindustries.flowwfasttravel.service.WaypointService;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -27,7 +29,7 @@ public final class FlowFastTravel extends JavaPlugin {
 
         Clock clock = Clock.system(ZoneId.systemDefault());
         WaypointRepository waypointRepository = new WaypointRepository(Waypoint.class);
-        WaypointService waypointService = new WaypointService(clock, waypointRepository);
+        WaypointService waypointService = new CachedWaypointService(new DefaultWaypointService(clock, waypointRepository));
         waypointService.init();
 
         var wpCommand = Objects.requireNonNull(getCommand("wp"));
