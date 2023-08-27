@@ -43,7 +43,9 @@ public class CachedWaypointService implements WaypointService {
     @Override
     public Waypoint updateWaypoint(String name, Waypoint waypoint) throws IllegalArgumentException {
         evictCache(name);
-        return delegate.updateWaypoint(name, waypoint);
+        final var updatedWaypoint = delegate.updateWaypoint(name, waypoint);
+        putCache(updatedWaypoint);
+        return updatedWaypoint;
     }
 
     @Override
